@@ -3,6 +3,8 @@ package client;
 import java.math.BigDecimal;
 import java.rmi.Naming;
 
+import server.MonteCarloServer;
+
 public class MonteCarloClient {
     public static void main(final String[] args) {
         if (System.getSecurityManager() == null) {
@@ -22,9 +24,9 @@ public class MonteCarloClient {
         }
         BigDecimal pi = new BigDecimal(0);
         for (BigDecimal bigDecimal : piValues) {
-            pi.add(bigDecimal);
+            pi = pi.add(bigDecimal);
         }
-        pi.divide(new BigDecimal(piValues.length));
+        pi = pi.divide(new BigDecimal(piValues.length));
         System.out.println(pi);
     }
 }

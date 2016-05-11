@@ -16,10 +16,12 @@ public class StartServer {
             LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
         } catch (Exception e) {
             System.out.println("Could not create RMIRegistry");
+            e.printStackTrace();
         }
         // Server Startup
         String name = "//" + args[0] + "/ComputePi";
         int genauigkeit = Integer.parseInt(args[1]);
+        
         try {
             Naming.rebind(name, new MonteCarloServerImpl(genauigkeit));
             System.out.println("Server (re)bound");
