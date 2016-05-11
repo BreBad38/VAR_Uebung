@@ -5,11 +5,15 @@ import java.rmi.Naming;
 
 public class MonteCarloClient {
     public static void main(final String[] args) {
+        if (System.getSecurityManager() == null) {
+            System.setProperty("java.security.policy", "src\\client\\rmi.policy");
+            System.setSecurityManager(new SecurityManager());
+        }
         MonteCarloServer server;
         BigDecimal[] piValues = new BigDecimal[args.length];
         try {
             for (int i = 0; i < args.length; i++) {
-                server = (MonteCarloServer) Naming.lookup(args[i]);
+                server = (MonteCarloServer) Naming.lookup("//" + args[i] + "/ComputePi");
                 piValues[i] = server.berechneZufallstropfen();
             }
         } catch (Exception e) {

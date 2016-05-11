@@ -1,0 +1,7 @@
+/* AUTOMATICALLY GENERATED ON Wed May 11 21:56:28 CEST 2016*/
+/* DO NOT EDIT */
+
+grant {
+  permission java.net.SocketPermission "*:1024-65535", "connect,accept";
+};
+
