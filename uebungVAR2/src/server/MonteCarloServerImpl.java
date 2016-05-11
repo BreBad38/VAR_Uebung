@@ -1,7 +1,9 @@
-package uebungVAR2;
+package server;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+
+import client.MonteCarloServer;
 
 @SuppressWarnings("serial")
 public class MonteCarloServerImpl extends UnicastRemoteObject implements MonteCarloServer {

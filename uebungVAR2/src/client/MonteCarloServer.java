@@ -1,4 +1,4 @@
-package uebungVAR2;
+package client;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
