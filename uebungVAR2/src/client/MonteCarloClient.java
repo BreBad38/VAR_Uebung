@@ -20,6 +20,7 @@ public class MonteCarloClient {
         for (BigDecimal bigDecimal : piValues) {
             pi.add(bigDecimal);
         }
+        pi.divide(new BigDecimal(piValues.length));
         System.out.println(pi);
     }
 }
