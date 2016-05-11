@@ -1,23 +1,25 @@
 package client;
 
+import java.math.BigDecimal;
 import java.rmi.Naming;
 
 public class MonteCarloClient {
     public static void main(final String[] args) {
-        int gesamtZahl = 100000;
-        int tropfenImKreis = 0;
         MonteCarloServer server;
+        BigDecimal[] piValues = new BigDecimal[args.length];
         try {
-            for (String name : args) {
-                server = (MonteCarloServer) Naming.lookup(name);
-                tropfenImKreis += server.berechneZufallstropfen(gesamtZahl);
+            for (int i = 0; i < args.length; i++) {
+                server = (MonteCarloServer) Naming.lookup(args[i]);
+                piValues[i] = server.berechneZufallstropfen();
             }
         } catch (Exception e) {
             System.out.println("Hoppla, da ist etwas schiefgelaufen...");
             e.printStackTrace();
         }
-
-        double pi = 4 * (double) tropfenImKreis / gesamtZahl;
-        System.out.println(gesamtZahl + " Tropfen, davon " + tropfenImKreis + " Tropfen im Viertelkreis, Pi etwa " + pi);
+        BigDecimal pi = new BigDecimal(0);
+        for (BigDecimal bigDecimal : piValues) {
+            pi.add(bigDecimal);
+        }
+        System.out.println(pi);
     }
 }
