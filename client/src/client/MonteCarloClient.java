@@ -16,7 +16,7 @@ public class MonteCarloClient {
         try {
             for (int i = 0; i < args.length; i++) {
                 server = (MonteCarloServer) Naming.lookup("//" + args[i] + "/ComputePi");
-                piValues[i] = server.berechneZufallstropfen();
+                piValues[i] = server.berechnePi();
             }
         } catch (Exception e) {
             System.out.println("Hoppla, da ist etwas schiefgelaufen...");
