@@ -8,7 +8,7 @@ import server.MonteCarloServer;
 public class MonteCarloClient {
     public static void main(final String[] args) {
         if (System.getSecurityManager() == null) {
-            System.setProperty("java.security.policy", "src\\client\\rmi.policy");
+            System.setProperty("java.security.policy", "policy\\rmi.policy");
             System.setSecurityManager(new SecurityManager());
         }
         MonteCarloServer server;

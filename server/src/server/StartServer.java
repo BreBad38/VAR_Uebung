@@ -8,7 +8,7 @@ public class StartServer {
 
     public static void main(final String[] args) {
         if (System.getSecurityManager() == null) {
-            System.setProperty("java.security.policy", "src\\server\\rmi.policy");
+            System.setProperty("java.security.policy", "policy\\rmi.policy");
             System.setSecurityManager(new SecurityManager());
         }
 
@@ -21,7 +21,7 @@ public class StartServer {
         // Server Startup
         String name = "//" + args[0] + "/ComputePi";
         int genauigkeit = Integer.parseInt(args[1]);
-        
+
         try {
             Naming.rebind(name, new MonteCarloServerImpl(genauigkeit));
             System.out.println("Server (re)bound");
