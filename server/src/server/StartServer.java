@@ -10,7 +10,6 @@ public class StartServer {
     // Die Start-Parameter müssen wie folgt gesetzt werden:
     // 1. Parameter: Name/Adresse des Servers (String)
     // 2. Parameter: Genauigkeit (Int)
-    // 3. Parameter (optional): Port der Registry
     public static void main(final String[] args) {
         // Der Security Manager wird konfiguriert und gestartet, falls noch nicht geschehen
         if (System.getSecurityManager() == null) {
@@ -24,15 +23,8 @@ public class StartServer {
 
         // Erstellen der Registry
         try {
-            int port;
-            // Hat der Nutzer keinen Registry Port angegeben wird der Standard-Port verwendet
-            if (args.length != 3) {
-                port = Registry.REGISTRY_PORT;
-            } else {
-                port = Integer.parseInt(args[2]);
-            }
-            LocateRegistry.createRegistry(port);
-            System.out.println("Die Registry wurde auf dem Port " + port + " erstellt.");
+            LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
+            System.out.println("Die Registry wurde erfolgreich erstellt.");
         } catch (Exception e) {
             System.out.println("Die Registry konnte nicht erstellt werden...");
             e.printStackTrace();
