@@ -7,9 +7,9 @@ import java.rmi.server.UnicastRemoteObject;
 @SuppressWarnings("serial")
 public class MonteCarloServerImpl extends UnicastRemoteObject implements MonteCarloServer {
 
-    int genauigkeit;
+    long genauigkeit;
 
-    MonteCarloServerImpl(final int genauigkeit) throws RemoteException {
+    MonteCarloServerImpl(final long genauigkeit) throws RemoteException {
         super();
         this.genauigkeit = genauigkeit;
     }
