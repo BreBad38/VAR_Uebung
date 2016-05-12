@@ -12,10 +12,10 @@ public class StartServer {
     // 3. Parameter (optional): Port der Registry
     public static void main(final String[] args) {
         // Der Security Manager wird konfiguriert und gestartet, falls noch nicht geschehen
-        // if (System.getSecurityManager() == null) {
-        // System.setProperty("java.security.policy", "policy\\rmi.policy");
-        // System.setSecurityManager(new SecurityManager());
-        // }
+        if (System.getSecurityManager() == null) {
+            System.setProperty("java.security.policy", "policy\\rmi.policy");
+            System.setSecurityManager(new SecurityManager());
+        }
 
         // Erstellen der Registry
         try {
