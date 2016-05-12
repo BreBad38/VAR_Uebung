@@ -1,6 +1,7 @@
 package client;
 
 import java.math.BigDecimal;
+import java.net.URL;
 import java.rmi.Naming;
 
 import server.MonteCarloServer;
@@ -11,7 +12,8 @@ public class MonteCarloClient {
     public static void main(final String[] args) {
         // Anlegen und Konfigurieren des Security Managers, falls noch nicht geschehen
         if (System.getSecurityManager() == null) {
-            System.setProperty("java.security.policy", "policy\\rmi.policy");
+            URL url = MonteCarloClient.class.getClassLoader().getResource("rmi.policy");
+            System.setProperty("java.security.policy", url.getPath());
             System.setSecurityManager(new SecurityManager());
         }
 

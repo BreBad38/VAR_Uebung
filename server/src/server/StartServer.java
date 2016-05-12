@@ -1,5 +1,6 @@
 package server;
 
+import java.net.URL;
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -13,8 +14,12 @@ public class StartServer {
     public static void main(final String[] args) {
         // Der Security Manager wird konfiguriert und gestartet, falls noch nicht geschehen
         if (System.getSecurityManager() == null) {
-            System.setProperty("java.security.policy", "policy\\rmi.policy");
+            URL url = StartServer.class.getClassLoader().getResource("rmi.policy");
+            System.setProperty("java.security.policy", url.getPath());
             System.setSecurityManager(new SecurityManager());
+            System.out.println("Der SecurityManager wurde konfiguriert.");
+        } else {
+            System.out.println("Der SecurityManager wurde nicht konfiguriert.");
         }
 
         // Erstellen der Registry
@@ -27,6 +32,7 @@ public class StartServer {
                 port = Integer.parseInt(args[2]);
             }
             LocateRegistry.createRegistry(port);
+            System.out.println("Die Registry wurde auf dem Port " + port + " erstellt.");
         } catch (Exception e) {
             System.out.println("Die Registry konnte nicht erstellt werden...");
             e.printStackTrace();
@@ -37,7 +43,8 @@ public class StartServer {
         long genauigkeit = Long.parseLong(args[1]);
         try {
             Naming.rebind(name, new MonteCarloServerImpl(genauigkeit));
-            System.out.println("Der MonteCarloServer " + name + " wurde mit einer Genauigkeit von " + genauigkeit + " Wiederholungen gestartet.");
+            System.out.println("Der MonteCarloServer an der Adresse " + args[0] + " wurde mit einer Genauigkeit von " + genauigkeit
+                    + " Wiederholungen gestartet.");
         } catch (Exception e) {
             System.err.println("Server Exception: " + e.getMessage());
             e.printStackTrace();
