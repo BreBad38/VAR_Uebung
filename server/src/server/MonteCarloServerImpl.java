@@ -16,7 +16,7 @@ public class MonteCarloServerImpl extends UnicastRemoteObject implements MonteCa
 
     @Override
     public BigDecimal berechnePi() throws RemoteException {
-        int tropfenImKreis = 0;
+        long tropfenImKreis = 0;
         double x, y;
         for (int i = 1; i <= genauigkeit; i++) {
             x = Math.random();
