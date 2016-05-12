@@ -7,7 +7,7 @@ import java.rmi.registry.Registry;
 public class StartServer {
 
     // Die Start-Parameter müssen wie folgt gesetzt werden:
-    // 1. Parameter: Name des Server (String)
+    // 1. Parameter: Name/Adresse des Servers (String)
     // 2. Parameter: Genauigkeit (Int)
     // 3. Parameter (optional): Port der Registry
     public static void main(final String[] args) {

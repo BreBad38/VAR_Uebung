@@ -6,6 +6,8 @@ import java.rmi.Naming;
 import server.MonteCarloServer;
 
 public class MonteCarloClient {
+    // Die Start-Parameter müssen wie folgt gesetzt werden:
+    // 1. - n. Parameter: Name/Adresse des Servers (String)
     public static void main(final String[] args) {
         // Anlegen und Konfigurieren des Security Managers, falls noch nicht geschehen
         if (System.getSecurityManager() == null) {
