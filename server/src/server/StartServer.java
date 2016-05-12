@@ -28,7 +28,7 @@ public class StartServer {
             }
             LocateRegistry.createRegistry(port);
         } catch (Exception e) {
-            System.out.println("Could not create RMIRegistry");
+            System.out.println("Die Registry konnte nicht erstellt werden...");
             e.printStackTrace();
         }
 
@@ -37,7 +37,7 @@ public class StartServer {
         long genauigkeit = Long.parseLong(args[1]);
         try {
             Naming.rebind(name, new MonteCarloServerImpl(genauigkeit));
-            System.out.println("Server (re)bound");
+            System.out.println("Der MonteCarloServer " + name + " wurde mit einer Genauigkeit von " + genauigkeit + " Wiederholungen gestartet.");
         } catch (Exception e) {
             System.err.println("Server Exception: " + e.getMessage());
             e.printStackTrace();

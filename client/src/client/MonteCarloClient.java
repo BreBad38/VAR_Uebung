@@ -23,6 +23,7 @@ public class MonteCarloClient {
                 server = (MonteCarloServer) Naming.lookup("//" + args[i] + "/ComputePi");
                 // Die Pi-Werte werden in ein Array geschrieben
                 piValues[i] = server.berechnePi();
+                System.out.println("Annäherung an Pi von Server " + i + ": " + piValues[i]);
             }
         } catch (Exception e) {
             System.out.println("Hoppla, da ist etwas schiefgelaufen...");
@@ -36,7 +37,7 @@ public class MonteCarloClient {
         }
         // ...und dann durch ihre Anzahl geteilt, um einen Mittelwert zu ermitteln
         pi = pi.divide(new BigDecimal(piValues.length));
-        System.out.println("Die Annäherung für Pi lautet:");
+        System.out.println("\nDie finale Annäherung an Pi lautet:");
         System.out.println(pi);
     }
 }
