@@ -10,10 +10,10 @@ public class MonteCarloClient {
     // 1. - n. Parameter: Name/Adresse des Servers (String)
     public static void main(final String[] args) {
         // Anlegen und Konfigurieren des Security Managers, falls noch nicht geschehen
-        if (System.getSecurityManager() == null) {
-            System.setProperty("java.security.policy", "policy\\rmi.policy");
-            System.setSecurityManager(new SecurityManager());
-        }
+        // if (System.getSecurityManager() == null) {
+        // System.setProperty("java.security.policy", "policy\\rmi.policy");
+        // System.setSecurityManager(new SecurityManager());
+        // }
 
         MonteCarloServer server;
         BigDecimal[] piValues = new BigDecimal[args.length];
