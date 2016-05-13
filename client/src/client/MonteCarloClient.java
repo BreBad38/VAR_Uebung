@@ -18,28 +18,36 @@ public class MonteCarloClient {
         }
 
         MonteCarloServer server;
-        BigDecimal[] piValues = new BigDecimal[args.length];
+        long wiederholungen = 100000;
+        int nachkommastellen = 4;
+        int identifizierteZahlen = 0;
+        int index = 0;
+        BigDecimal[] pi = new BigDecimal[2];
+        BigDecimal delta;
         try {
-            // Jeder Server wird mit der Berechnung einer Pi-Annäherung beauftragt
-            for (int i = 0; i < args.length; i++) {
-                server = (MonteCarloServer) Naming.lookup("//" + args[i] + "/ComputePi");
-                // Die Pi-Werte werden in ein Array geschrieben
-                piValues[i] = server.berechnePi();
-                System.out.println("Annäherung an Pi von Server " + i + ": " + piValues[i]);
+            while (identifizierteZahlen < nachkommastellen + 1) {
+                for (int i = 0; i < 2; i++) {
+                    if (index < args.length - 1) {
+                        index++;
+                    } else {
+                        index = 0;
+                    }
+                    server = (MonteCarloServer) Naming.lookup("//" + args[index] + "/ComputePi");
+                    pi[i] = new BigDecimal(4 * (double) server.berechnePi(wiederholungen) / wiederholungen);
+                }
+                delta = pi[0].subtract(pi[1]);
+                identifizierteZahlen = delta.scale() - delta.precision() + 1;
+                // To be continued...
+                // Folgendes muss jetzt passieren:
+                // Angenommen wir konnten 5 Zahlen identifizieren, können wir nun die ersten 5 Ziffern von pi[0] (oder pi[1]) in unser Endergebnis
+                // übernehmen
             }
         } catch (Exception e) {
             System.out.println("Hoppla, da ist etwas schiefgelaufen...");
             e.printStackTrace();
         }
 
-        BigDecimal pi = new BigDecimal(0);
-        // Die Pi-Annäherungen werden aufaddiert...
-        for (BigDecimal bigDecimal : piValues) {
-            pi = pi.add(bigDecimal);
-        }
-        // ...und dann durch ihre Anzahl geteilt, um einen Mittelwert zu ermitteln
-        pi = pi.divide(new BigDecimal(piValues.length));
         System.out.println("\nDie finale Annäherung an Pi lautet:");
-        System.out.println(pi);
+        System.out.println();
     }
 }

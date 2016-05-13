@@ -1,6 +1,5 @@
 package server;
 
-import java.net.URL;
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -13,9 +12,8 @@ public class StartServer {
     public static void main(final String[] args) {
         // Der Security Manager wird konfiguriert und gestartet, falls noch nicht geschehen
         if (System.getSecurityManager() == null) {
-            URL url = StartServer.class.getClassLoader().getResource("rmi.policy");
-            System.setProperty("java.security.policy", url.getPath());
-            System.out.println(url.getPath());
+            // URL url = StartServer.class.getClassLoader().getResource("rmi.policy");
+            System.setProperty("java.security.policy", "policy/rmi.policy");
             System.setSecurityManager(new SecurityManager());
             System.out.println("Der SecurityManager wurde konfiguriert.");
         } else {
@@ -33,11 +31,9 @@ public class StartServer {
 
         // Jeder Server erhält einen Namen und eine Angabe für die Genauigkeit
         String name = "//" + args[0] + "/ComputePi";
-        long genauigkeit = Long.parseLong(args[1]);
         try {
-            Naming.rebind(name, new MonteCarloServerImpl(genauigkeit));
-            System.out.println("Der MonteCarloServer an der Adresse " + args[0] + " wurde mit einer Genauigkeit von " + genauigkeit
-                    + " Wiederholungen gestartet.");
+            Naming.rebind(name, new MonteCarloServerImpl());
+            System.out.println("Der MonteCarloServer an der Adresse " + args[0] + " wurde gestartet.");
         } catch (Exception e) {
             System.err.println("Server Exception: " + e.getMessage());
             e.printStackTrace();

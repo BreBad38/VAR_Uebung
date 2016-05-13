@@ -1,30 +1,26 @@
 package server;
 
-import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 @SuppressWarnings("serial")
 public class MonteCarloServerImpl extends UnicastRemoteObject implements MonteCarloServer {
 
-    long genauigkeit;
-
-    MonteCarloServerImpl(final long genauigkeit) throws RemoteException {
+    MonteCarloServerImpl() throws RemoteException {
         super();
-        this.genauigkeit = genauigkeit;
     }
 
     @Override
-    public BigDecimal berechnePi() throws RemoteException {
+    public long berechnePi(final long wiederholungen) throws RemoteException {
         long tropfenImKreis = 0;
         double x, y;
-        for (int i = 1; i <= genauigkeit; i++) {
+        for (int i = 1; i <= wiederholungen; i++) {
             x = Math.random();
             y = Math.random();
             if (Math.hypot(x, y) <= 1) {
                 tropfenImKreis++;
             }
         }
-        return new BigDecimal(4 * (double) tropfenImKreis / genauigkeit);
+        return tropfenImKreis;
     }
 }
