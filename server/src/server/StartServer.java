@@ -15,6 +15,7 @@ public class StartServer {
         if (System.getSecurityManager() == null) {
             URL url = StartServer.class.getClassLoader().getResource("rmi.policy");
             System.setProperty("java.security.policy", url.getPath());
+            System.out.println(url.getPath());
             System.setSecurityManager(new SecurityManager());
             System.out.println("Der SecurityManager wurde konfiguriert.");
         } else {
