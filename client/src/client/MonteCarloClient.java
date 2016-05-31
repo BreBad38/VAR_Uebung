@@ -6,7 +6,8 @@ import java.rmi.Naming;
 import server.MonteCarloServer;
 
 public class MonteCarloClient {
-    // Die Start-Parameter müssen wie folgt gesetzt werden:
+
+    // Die Start-Parameter mï¿½ssen wie folgt gesetzt werden:
     // 1. - n. Parameter: Name/Adresse des Servers (String)
     public static void main(final String[] args) {
         // Anlegen und Konfigurieren des Security Managers, falls noch nicht geschehen
@@ -16,33 +17,49 @@ public class MonteCarloClient {
         }
 
         MonteCarloServer server;
-        long wiederholungen = 1000000;
-        BigDecimal pi = new BigDecimal(0);
-        long[] tropfenImKreis = new long[args.length];
-        long summe = 0;
+        long wiederholungen = 50000000;
+        BigDecimal[] piArray = new BigDecimal[25];
+        long[] tropfenImKreis = new long[5];
+        double summe = 0.0;
+
         int index = 0;
 
         try {
-            for (int i = 0; i < 5; i++) {
-                if (index < args.length - 1) {
-                    index++;
-                } else {
-                    index = 0;
+            for (int p = 0; p < piArray.length; p++) {
+
+                System.out.println(p);
+
+                summe = 0.0;
+                for (int i = 0; i < tropfenImKreis.length; i++) {
+                    if (index < args.length - 1) {
+                        index++;
+                    } else {
+                        index = 0;
+                    }
+                    server = (MonteCarloServer) Naming.lookup("//" + args[index] + "/ComputePi");
+                    tropfenImKreis[i] = server.berechnePi(wiederholungen);
                 }
-                server = (MonteCarloServer) Naming.lookup("//" + args[index] + "/ComputePi");
-                tropfenImKreis[index] = server.berechnePi(wiederholungen);
+                for (long l : tropfenImKreis) {
+                    summe += l;
+                }
+                summe = summe / tropfenImKreis.length;
+                // System.out.println(summe);
+                piArray[p] = new BigDecimal(4 * summe / wiederholungen);
             }
-            for (long l : tropfenImKreis) {
-                summe += l;
-            }
-            summe = summe / args.length;
-            pi = new BigDecimal(4 * (double) summe / wiederholungen);
         } catch (Exception e) {
             System.out.println("Hoppla, da ist etwas schiefgelaufen...");
             e.printStackTrace();
         }
 
-        System.out.println("Die finale Annäherung an Pi lautet:");
-        System.out.println(pi);
+        System.out.println("Die finale Annï¿½herung an Pi lautet:");
+
+        BigDecimal durchschnitt = new BigDecimal(0);
+        for (int i = 0; i < piArray.length; i++) {
+            durchschnitt = durchschnitt.add(piArray[i]);
+        }
+        durchschnitt = durchschnitt.divide(new BigDecimal(piArray.length));
+        System.out.println(durchschnitt);
+
     }
+
 }
