@@ -31,6 +31,7 @@ public class MonteCarloClient {
 
         // Anzahl der PI-Werte, die übereinstimmen sollen
         int anzahlPiVergleiche = 2;
+        System.out.println("Anzahl der Übereinstimmungen (PI-Werte): " + anzahlPiVergleiche);
 
         // Anzahl der Durchläufe pro Zufallszahl
         int anzahlDurchlaeufe = 10;
