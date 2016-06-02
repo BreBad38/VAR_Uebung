@@ -3,6 +3,8 @@ package client;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.Naming;
+import java.util.Arrays;
+import java.util.HashSet;
 
 import server.MonteCarloServer;
 
@@ -16,6 +18,9 @@ public class MonteCarloClient {
         if (System.getSecurityManager() == null) {
             System.setProperty("java.security.policy", "policy\\rmi.policy");
             System.setSecurityManager(new SecurityManager());
+            System.out.println("Der SecurityManager (Client) wurde konfiguriert.");
+        } else {
+            System.out.println("Der SecurityManager (Client) wurde nicht konfiguriert.");
         }
 
         int nachkommastellen = Integer.parseInt(args[0]);
@@ -35,9 +40,11 @@ public class MonteCarloClient {
         int zaehler = 0;
         MonteCarloServer server;
 
-        try {
+        try
+
+        {
             // Wiederhole den Vorgang solange bis Pi gefunden wurde
-            while (piGefunden == false) {
+            do {
                 zaehler++;
                 System.out.println("Wiederholungen: " + wiederholungen);
 
@@ -72,29 +79,27 @@ public class MonteCarloClient {
                         wiederholungen += 300000;
                     }
                 }
-            }
+            } while ((piGefunden == false));
 
-        } catch (Exception e) {
+        } catch (
+
+        Exception e)
+
+        {
             System.out.println("Hoppla, da ist etwas schiefgelaufen...");
             e.printStackTrace();
         }
 
         System.out.println("Die finale Annäherung an Pi lautet:");
         System.out.println(piArray[0]);
+
     }
 
     public static boolean vergleichePIWerte(final BigDecimal[] piArray) {
-        boolean gleicherWert = false;
-        // Für jeden Wert wird geschaut, ob er mit dem jeweils nächsten übereinstimmt
-        for (int i = 0; i < piArray.length; i++) {
-            if (piArray[i].equals(piArray[i + 1]) == false) {
-                gleicherWert = false;
-                break;
-            } else {
-                gleicherWert = true;
-            }
+        if (new HashSet<>(Arrays.asList(piArray)).size() == 1) {
+            return true;
         }
-        return gleicherWert;
+        return false;
     }
 
 }
