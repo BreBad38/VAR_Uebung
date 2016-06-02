@@ -9,7 +9,8 @@ import server.MonteCarloServer;
 public class MonteCarloClient {
 
     // Die Start-Parameter müssen wie folgt gesetzt werden:
-    // 1. - n. Parameter: Name/Adresse des Servers (String)
+    // 1. Parameter: Anzahl der Nachkommastellen
+    // 2. - n. Parameter: Name/Adresse des Servers (String)
     public static void main(final String[] args) {
         // Anlegen und Konfigurieren des Security Managers, falls noch nicht geschehen
         if (System.getSecurityManager() == null) {
@@ -19,14 +20,14 @@ public class MonteCarloClient {
 
         MonteCarloServer server;
         long wiederholungen = 100000;
-        int nachkommastellen = 3;
+        int nachkommastellen = Integer.parseInt(args[0]);
         int anzahlVergleiche = 3;
         BigDecimal[] piArray = new BigDecimal[anzahlVergleiche];
         long[] tropfenImKreis = new long[anzahlVergleiche];
 
         boolean nichtFertig = true;
 
-        int index = 0;
+        int index = 1;
         int zaehler = 0;
 
         try {
@@ -37,7 +38,7 @@ public class MonteCarloClient {
                     if (index < args.length - 1) {
                         index++;
                     } else {
-                        index = 0;
+                        index = 1;
                     }
                     server = (MonteCarloServer) Naming.lookup("//" + args[index] + "/ComputePi");
                     tropfenImKreis[i] = server.berechneTropfenImKreis(wiederholungen);
