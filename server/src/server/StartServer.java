@@ -8,7 +8,6 @@ public class StartServer {
 
     // Die Start-Parameter müssen wie folgt gesetzt werden:
     // 1. Parameter: Name/Adresse des Servers (String)
-    // 2. Parameter: Genauigkeit (Int)
     public static void main(final String[] args) {
         // Der Security Manager wird konfiguriert und gestartet, falls noch nicht geschehen
         if (System.getSecurityManager() == null) {

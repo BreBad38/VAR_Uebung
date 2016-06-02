@@ -11,7 +11,7 @@ public class MonteCarloServerImpl extends UnicastRemoteObject implements MonteCa
     }
 
     @Override
-    public long berechnePi(final long wiederholungen) throws RemoteException {
+    public long berechneTropfenImKreis(final long wiederholungen) throws RemoteException {
         long tropfenImKreis = 0;
         double x, y;
         for (int i = 1; i <= wiederholungen; i++) {
