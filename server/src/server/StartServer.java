@@ -6,7 +6,7 @@ import java.rmi.registry.Registry;
 
 public class StartServer {
 
-    // Die Start-Parameter mÃ¼ssen wie folgt gesetzt werden:
+    // Die Start-Parameter müssen wie folgt gesetzt werden:
     // 1. Parameter: Name/Adresse des Servers (String)
     public static void main(final String[] args) {
 
@@ -28,7 +28,7 @@ public class StartServer {
             e.printStackTrace();
         }
 
-        // Jeder Server erhÃ¤lt einen Namen und eine Angabe fÃ¼r die Genauigkeit
+        // Jeder Server erhält einen Namen
         String name = "//" + args[0] + "/ComputePi";
         try {
             Naming.rebind(name, new MonteCarloServerImpl());
