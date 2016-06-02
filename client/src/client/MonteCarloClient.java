@@ -3,98 +3,98 @@ package client;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.Naming;
-import java.util.Arrays;
-import java.util.HashSet;
 
 import server.MonteCarloServer;
 
 public class MonteCarloClient {
 
-    // Die Start-Parameter mÃ¼ssen wie folgt gesetzt werden:
+    // Die Start-Parameter müssen wie folgt gesetzt werden:
     // 1. Parameter: Anzahl der Nachkommastellen
     // 2. - n. Parameter: Name/Adresse des Servers (String)
     public static void main(final String[] args) {
-
-        // Der Security Manager wird konfiguriert und gestartet, falls noch nicht geschehen
+        // Anlegen und Konfigurieren des Security Managers, falls noch nicht geschehen
         if (System.getSecurityManager() == null) {
             System.setProperty("java.security.policy", "policy\\rmi.policy");
             System.setSecurityManager(new SecurityManager());
-            System.out.println("Der SecurityManager (Client) wurde konfiguriert.");
-        } else {
-            System.out.println("Der SecurityManager (Client) wurde nicht konfiguriert.");
         }
 
+        int nachkommastellen = Integer.parseInt(args[0]);
+
+        // Startwert für Wiederholungen
+        long wiederholungen = 100000;
+        // Gibt an, wie viele Pi-Werte verglichen werden und übereinstimmen müssen
+        int anzahlVergleiche = 3;
+        // Pi-Array, dass mit Pi-Annäherungen gefüllt wird
+        BigDecimal[] piArray = new BigDecimal[anzahlVergleiche];
+
+        long tropfenImKreis;
+
+        boolean piGefunden = false;
+
+        int index = 1;
+        int zaehler = 0;
         MonteCarloServer server;
 
-        // Anzahl der Zufallszahlen
-        long anzahlZufallszahlen = 100000;
+        try {
+            // Wiederhole den Vorgang solange bis Pi gefunden wurde
+            while (piGefunden == false) {
+                zaehler++;
+                System.out.println("Wiederholungen: " + wiederholungen);
 
-        // Anzahl der PI-Werte, die Ã¼bereinstimmen sollen
-        int anzahlPIVergleiche = 3;
-        System.out.println("Anzahl der Ãœbereinstimmungen (PI-Werte): " + anzahlPIVergleiche);
-
-        // Anzahl der DurchlÃ¤ufe pro Zufallszahl
-        int anzahlDurchlaeufe = 10;
-
-        int anzahlNachkommastellen = Integer.parseInt(args[0]);
-        System.out.println("Genauigkeit (Anzahl der Nachkommastellen): " + anzahlNachkommastellen);
-
-        String[] addresses = getAddresses(args);
-
-        if (addresses != null) {
-            try {
-                for (int i = 0; i < anzahlDurchlaeufe; i++) {
-
-                    BigDecimal[] piArray = new BigDecimal[anzahlPIVergleiche];
-
-                    System.out.println("Zufallszahlen: " + anzahlZufallszahlen);
-
-                    for (int j = 0; j < piArray.length; j++) {
-                        server = (MonteCarloServer) Naming.lookup("//" + addresses[0] + "/ComputePi");
-                        long tropfenImKreis = server.berechneTropfenImKreis(anzahlZufallszahlen);
-                        piArray[j] = berechnePI(tropfenImKreis, anzahlZufallszahlen, anzahlNachkommastellen);
+                // Die erste For-Schleife befüllt das Pi-Array mit Pi-Annäherungen, in dem es die gegebenen Server nacheinander anfragt
+                for (int i = 0; i < piArray.length; i++) {
+                    // Die Variable Index zählt unabhängig von der for-Schleife durch das Array, in dem die Server-Adressen gespeichert sind
+                    if (index < args.length - 1) {
+                        index++;
+                    } else {
+                        index = 1;
                     }
 
-                    if (checkPIWerteAufUebereinstimmung(piArray)) {
-                        System.out.println("Ja hey Mario: Die finale AnnÃ¤herung an Pi lautet: " + piArray[0]);
-                        break;
-                    } else if (i == anzahlDurchlaeufe - 1) {
-                        // ErhÃ¶hung der Zufallszahlen um 300.000 nach dem X. Versuch
-                        anzahlZufallszahlen += 300000;
-                        // Reset der DuchlÃ¤ufe
-                        i = -1;
+                    server = (MonteCarloServer) Naming.lookup("//" + args[index] + "/ComputePi");
+                    // Die Methode des Servers wird gerufen
+                    tropfenImKreis = server.berechneTropfenImKreis(wiederholungen);
+                    // Aus dem Rückgabewert wird eine Pi-Annäherung berechnet
+                    piArray[i] = new BigDecimal(4 * (double) tropfenImKreis / wiederholungen);
+                    // Die Pi-Annäherung wird auf x Nachkommastellen gekürzt
+                    piArray[i] = piArray[i].setScale(nachkommastellen, RoundingMode.FLOOR);
+                }
+
+                // Die Pi-Annäherungen werden verglichen
+                if (vergleichePIWerte(piArray)) {
+                    // Stimmen alle Werte überein, wird die while-Schleifen-Bedingung auf true gesetzt
+                    piGefunden = true;
+                } else {
+                    // Ansonsten bleibt sie false
+                    piGefunden = false;
+
+                    // Die Anzahl der Wiederholungen soll alle 10 Durchläufe erhöht werden
+                    if (zaehler % 10 == 0) {
+                        wiederholungen += 300000;
                     }
                 }
-            } catch (Exception e) {
-                System.out.println("Hoppla Mario, da ist etwas schiefgelaufen...");
-                e.printStackTrace();
             }
-        } else {
-            System.out.println("Keine Pizzagrotte gefunden...");
-        }
-    }
 
-    public static String[] getAddresses(final String[] args) {
-
-        String[] addresses = new String[args.length - 1];
-
-        for (int i = 0; i < addresses.length; i++) {
-            addresses[i] = args[i + 1];
+        } catch (Exception e) {
+            System.out.println("Hoppla, da ist etwas schiefgelaufen...");
+            e.printStackTrace();
         }
 
-        return addresses;
+        System.out.println("Die finale Annäherung an Pi lautet:");
+        System.out.println(piArray[0]);
     }
 
-    public static boolean checkPIWerteAufUebereinstimmung(final BigDecimal[] pis) {
-        // Duplikate werden entfernt
-        if (new HashSet<>(Arrays.asList(pis)).size() == 1) {
-            return true;
+    public static boolean vergleichePIWerte(final BigDecimal[] piArray) {
+        boolean gleicherWert = false;
+        // Für jeden Wert wird geschaut, ob er mit dem jeweils nächsten übereinstimmt
+        for (int i = 0; i < piArray.length; i++) {
+            if (piArray[i].equals(piArray[i + 1]) == false) {
+                gleicherWert = false;
+                break;
+            } else {
+                gleicherWert = true;
+            }
         }
-        return false;
-    }
-
-    public static BigDecimal berechnePI(final long anzahlTropfenImKreis, final long anzahlZufallszahlen, final int anzahlNachkommstellen) {
-        return new BigDecimal(4 * (double) anzahlTropfenImKreis / anzahlZufallszahlen).setScale(anzahlNachkommstellen, RoundingMode.FLOOR);
+        return gleicherWert;
     }
 
 }
