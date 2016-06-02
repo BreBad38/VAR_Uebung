@@ -6,17 +6,17 @@ import java.rmi.registry.Registry;
 
 public class StartServer {
 
-    // Die Start-Parameter müssen wie folgt gesetzt werden:
+    // Die Start-Parameter mÃ¼ssen wie folgt gesetzt werden:
     // 1. Parameter: Name/Adresse des Servers (String)
     public static void main(final String[] args) {
+
         // Der Security Manager wird konfiguriert und gestartet, falls noch nicht geschehen
         if (System.getSecurityManager() == null) {
-            // URL url = StartServer.class.getClassLoader().getResource("rmi.policy");
             System.setProperty("java.security.policy", "policy/rmi.policy");
             System.setSecurityManager(new SecurityManager());
-            System.out.println("Der SecurityManager wurde konfiguriert.");
+            System.out.println("Der SecurityManager (Server) wurde konfiguriert.");
         } else {
-            System.out.println("Der SecurityManager wurde nicht konfiguriert.");
+            System.out.println("Der SecurityManager (Server) wurde nicht konfiguriert.");
         }
 
         // Erstellen der Registry
@@ -28,7 +28,7 @@ public class StartServer {
             e.printStackTrace();
         }
 
-        // Jeder Server erhält einen Namen und eine Angabe für die Genauigkeit
+        // Jeder Server erhÃ¤lt einen Namen und eine Angabe fÃ¼r die Genauigkeit
         String name = "//" + args[0] + "/ComputePi";
         try {
             Naming.rebind(name, new MonteCarloServerImpl());
@@ -38,4 +38,5 @@ public class StartServer {
             e.printStackTrace();
         }
     }
+
 }
