@@ -23,12 +23,13 @@ public class MonteCarloClient {
             System.out.println("Der SecurityManager (Client) wurde nicht konfiguriert.");
         }
 
+        // Genauigkeit der Pi-Annäherung in Bezug auf die Nachkommastellen
         int nachkommastellen = Integer.parseInt(args[0]);
 
-        // Startwert für Wiederholungen
-        long wiederholungen = 100000;
+        // Startwert für Anzahl an Zufallszahlen
+        long anzahlZufallszahlen = 100000;
         // Gibt an, wie viele Pi-Werte verglichen werden und übereinstimmen müssen
-        int anzahlVergleiche = 3;
+        int anzahlVergleiche = 2;
         // Pi-Array, dass mit Pi-Annäherungen gefüllt wird
         BigDecimal[] piArray = new BigDecimal[anzahlVergleiche];
 
@@ -40,13 +41,11 @@ public class MonteCarloClient {
         int zaehler = 0;
         MonteCarloServer server;
 
-        try
-
-        {
+        try {
             // Wiederhole den Vorgang solange bis Pi gefunden wurde
             do {
                 zaehler++;
-                System.out.println("Wiederholungen: " + wiederholungen);
+                System.out.println("Anzahl an Zufallszahlen: " + anzahlZufallszahlen);
 
                 // Die erste For-Schleife befüllt das Pi-Array mit Pi-Annäherungen, in dem es die gegebenen Server nacheinander anfragt
                 for (int i = 0; i < piArray.length; i++) {
@@ -59,9 +58,9 @@ public class MonteCarloClient {
 
                     server = (MonteCarloServer) Naming.lookup("//" + args[index] + "/ComputePi");
                     // Die Methode des Servers wird gerufen
-                    tropfenImKreis = server.berechneTropfenImKreis(wiederholungen);
+                    tropfenImKreis = server.berechneTropfenImKreis(anzahlZufallszahlen);
                     // Aus dem Rückgabewert wird eine Pi-Annäherung berechnet
-                    piArray[i] = new BigDecimal(4 * (double) tropfenImKreis / wiederholungen);
+                    piArray[i] = new BigDecimal(4 * (double) tropfenImKreis / anzahlZufallszahlen);
                     // Die Pi-Annäherung wird auf x Nachkommastellen gekürzt
                     piArray[i] = piArray[i].setScale(nachkommastellen, RoundingMode.FLOOR);
                 }
@@ -74,25 +73,19 @@ public class MonteCarloClient {
                     // Ansonsten bleibt sie false
                     piGefunden = false;
 
-                    // Die Anzahl der Wiederholungen soll alle 10 Durchläufe erhöht werden
+                    // Die Anzahl der Zufallszahlen soll alle 10 Durchläufe erhöht werden
                     if (zaehler % 10 == 0) {
-                        wiederholungen += 300000;
+                        anzahlZufallszahlen += 300000;
                     }
                 }
-            } while ((piGefunden == false));
+            } while (piGefunden == false);
 
-        } catch (
-
-        Exception e)
-
-        {
+        } catch (Exception e) {
             System.out.println("Hoppla, da ist etwas schiefgelaufen...");
             e.printStackTrace();
         }
 
-        System.out.println("Die finale Annäherung an Pi lautet:");
-        System.out.println(piArray[0]);
-
+        System.out.println("Die finale Annäherung an Pi lautet:\n" + piArray[0]);
     }
 
     public static boolean vergleichePIWerte(final BigDecimal[] piArray) {
