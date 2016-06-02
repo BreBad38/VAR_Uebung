@@ -27,16 +27,16 @@ public class MonteCarloClient {
         MonteCarloServer server;
 
         // Anzahl der Zufallszahlen
-        long anzahlZufallszahlen = 10000;
+        long anzahlZufallszahlen = 100000;
 
         // Anzahl der PI-Werte, die übereinstimmen sollen
-        int anzahlPiVergleiche = 2;
-        System.out.println("Anzahl der Übereinstimmungen (PI-Werte): " + anzahlPiVergleiche);
+        int anzahlPIVergleiche = 3;
+        System.out.println("Anzahl der Übereinstimmungen (PI-Werte): " + anzahlPIVergleiche);
 
         // Anzahl der Durchläufe pro Zufallszahl
         int anzahlDurchlaeufe = 10;
 
-        int anzahlNachkommastellen = 3;
+        int anzahlNachkommastellen = Integer.parseInt(args[0]);
         System.out.println("Genauigkeit (Anzahl der Nachkommastellen): " + anzahlNachkommastellen);
 
         String[] addresses = getAddresses(args);
@@ -45,7 +45,7 @@ public class MonteCarloClient {
             try {
                 for (int i = 0; i < anzahlDurchlaeufe; i++) {
 
-                    BigDecimal[] piArray = new BigDecimal[anzahlPiVergleiche];
+                    BigDecimal[] piArray = new BigDecimal[anzahlPIVergleiche];
 
                     System.out.println("Zufallszahlen: " + anzahlZufallszahlen);
 
@@ -76,10 +76,10 @@ public class MonteCarloClient {
 
     public static String[] getAddresses(final String[] args) {
 
-        String[] addresses = new String[args.length];
+        String[] addresses = new String[args.length - 1];
 
         for (int i = 0; i < addresses.length; i++) {
-            addresses[i] = args[i];
+            addresses[i] = args[i + 1];
         }
 
         return addresses;
