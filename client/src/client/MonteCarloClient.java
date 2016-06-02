@@ -29,7 +29,7 @@ public class MonteCarloClient {
         // Startwert für Anzahl an Zufallszahlen
         long anzahlZufallszahlen = 100000;
         // Gibt an, wie viele Pi-Werte verglichen werden und übereinstimmen müssen
-        int anzahlVergleiche = 2;
+        int anzahlVergleiche = 3;
         // Pi-Array, dass mit Pi-Annäherungen gefüllt wird
         BigDecimal[] piArray = new BigDecimal[anzahlVergleiche];
 
