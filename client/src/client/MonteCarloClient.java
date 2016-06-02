@@ -55,11 +55,11 @@ public class MonteCarloClient {
                         piArray[j] = berechnePI(tropfenImKreis, anzahlZufallszahlen, anzahlNachkommastellen);
                     }
 
-                    if (checkPIs(piArray)) {
+                    if (checkPIWerteAufUebereinstimmung(piArray)) {
                         System.out.println("Ja hey Mario: Die finale Annäherung an Pi lautet: " + piArray[0]);
                         break;
                     } else if (i == anzahlDurchlaeufe - 1) {
-                        // Erhöhung der Zufallszahlen um 300.000 nach dem 10. Versuch
+                        // Erhöhung der Zufallszahlen um 300.000 nach dem X. Versuch
                         anzahlZufallszahlen += 300000;
                         // Reset der Duchläufe
                         i = -1;
@@ -85,7 +85,7 @@ public class MonteCarloClient {
         return addresses;
     }
 
-    public static boolean checkPIs(final BigDecimal[] pis) {
+    public static boolean checkPIWerteAufUebereinstimmung(final BigDecimal[] pis) {
         // Duplikate werden entfernt
         if (new HashSet<>(Arrays.asList(pis)).size() == 1) {
             return true;
